@@ -34,6 +34,17 @@ jobs:
       - name: Run Markdown Lint
         uses: actionshub/markdownlint@master
 
+  md-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@master
+      - name: markdown-link-check
+        uses: gaurav-nelson/github-action-markdown-link-check@1.0.2
+        with:
+          use-verbose-mode: 'yes'
+          folder-path: 'documentation'
+
   dokken:
     needs: [mdl, yamllint, delivery]
     runs-on: ubuntu-latest
