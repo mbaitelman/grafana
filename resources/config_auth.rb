@@ -97,6 +97,16 @@ property  :proxy_headers,                                  String,         defau
 property  :ldap_enabled,                                   [true, false],  default: false
 property  :ldap_config_file,                               String,         default: '/etc/grafana/ldap.toml'
 property  :ldap_allow_sign_up,                             [true, false],  default: true
+property  :okta_enabled,                                   [true, false],  default: false
+property  :okta_allow_sign_up,                             [true, false],  default: true
+property  :okta_client_id,                                 String,         default: ''
+property  :okta_client_secret,                             String,         default: ''
+property  :okta_scopes,                                    String,         default: '', description: 'openid profile email groups'
+property  :okta_auth_url,                                  String,         default: '', description: 'https://<tenant-id>.okta.com/oauth2/v1/authorize'
+property  :okta_token_url,                                 String,         default: '', description: 'https://<tenant-id>.okta.com/oauth2/v1/token'
+property  :okta_api_url,                                   String,         default: '', description: 'https://<tenant-id>.okta.com/oauth2/v1/userinfo'
+property  :okta_allowed_domains,                           String,         default: ''
+property  :okta_hosted_domain,                             String,         default: ''
 
 action :install do
   login_cookie_name = new_resource.login_cookie_name || GrafanaCookbook::CookieHelper.cookie_name
@@ -279,4 +289,32 @@ action :install do
   node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_proxy']['whitelist'] << new_resource.proxy_whitelist.to_s unless new_resource.proxy_whitelist.nil?
   node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_proxy']['headers'] ||= '' unless new_resource.proxy_headers.nil?
   node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_proxy']['headers'] << new_resource.proxy_headers.to_s unless new_resource.proxy_headers.nil?
+
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta'] ||= {}
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['enabled'] ||= '' unless new_resource.okta_enabled.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['enabled'] << new_resource.okta_enabled.to_s unless new_resource.okta_enabled.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['allow_sign_up'] ||= '' unless new_resource.okta_allow_sign_up.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['allow_sign_up'] << new_resource.okta_allow_sign_up.to_s unless new_resource.okta_allow_sign_up.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['client_id'] ||= '' unless new_resource.okta_client_id.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['client_id'] << new_resource.okta_client_id.to_s unless new_resource.okta_client_id.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['client_secret'] ||= '' unless new_resource.okta_client_secret.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['client_secret'] << new_resource.okta_client_secret.to_s unless new_resource.okta_client_secret.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['scopes'] ||= '' unless new_resource.okta_scopes.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['scopes'] << new_resource.okta_scopes.to_s unless new_resource.okta_scopes.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['auth_url'] ||= '' unless new_resource.okta_auth_url.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['auth_url'] << new_resource.okta_auth_url.to_s unless new_resource.okta_auth_url.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['token_url'] ||= '' unless new_resource.okta_token_url.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['token_url'] << new_resource.okta_token_url.to_s unless new_resource.okta_token_url.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['api_url'] ||= '' unless new_resource.okta_api_url.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['api_url'] << new_resource.okta_api_url.to_s unless new_resource.okta_api_url.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['allowed_domains'] ||= '' unless new_resource.okta_allowed_domains.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['allowed_domains'] << new_resource.okta_allowed_domains.to_s unless new_resource.okta_allowed_domains.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['hosted_domain'] ||= '' unless new_resource.okta_hosted_domain.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['hosted_domain'] << new_resource.okta_hosted_domain.to_s unless new_resource.okta_hosted_domain.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['allowed_groups'] ||= '' unless new_resource.okta_allowed_groups.nil?
+
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['hosted_domain'] ||= '' unless new_resource.okta_hosted_domain.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['hosted_domain'] << new_resource.okta_hosted_domain.to_s unless new_resource.okta_hosted_domain.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['hosted_domain'] ||= '' unless new_resource.okta_hosted_domain.nil?
+  node.run_state['sous-chefs'][new_resource.instance_name]['config']['auth_okta']['hosted_domain'] << new_resource.okta_hosted_domain.to_s unless new_resource.okta_hosted_domain.nil?
 end
