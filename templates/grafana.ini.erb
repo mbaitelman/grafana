@@ -763,6 +763,9 @@ allowed_groups = <%= @grafana['auth_azuread']['allowed_groups'] %>
 #################################### Okta Auth #######################
 <% if @grafana['auth_okta'] %>
 [auth.okta]
+<% if @grafana['auth_okta']['name'] %>
+name = <%= @grafana['auth_okta']['name'] %>
+<% end %>
 <% if @grafana['auth_okta']['enabled'] %>
 enabled = <%= @grafana['auth_okta']['enabled'] %>
 <% end %>
@@ -793,13 +796,10 @@ api_url = <%= @grafana['auth_okta']['api_url'] %>
 <% if @grafana['auth_okta']['allowed_domains'] %>
 allowed_domains = <%= @grafana['auth_okta']['allowed_domains'] %>
 <% end %>
-<% if @grafana['auth_okta']['hosted_domain'] %>
-hosted_domain = <%= @grafana['auth_okta']['hosted_domain'] %>
-<% end %>
 <% if @grafana['auth_okta']['allowed_groups'] %>
 allowed_groups = <%= @grafana['auth_okta']['allowed_groups'] %>
 <% end %>
-<% if @grafana['auth_okta']['hosted_domain'] %>
+<% if @grafana['auth_okta']['role_attribute_path'] %>
 role_attribute_path = <%= @grafana['auth_okta']['role_attribute_path'] %>
 <% end %>
 <% end %>
